@@ -1,0 +1,18 @@
+@keyframes pulseOnce {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-pulse-once {
+  animation: pulseOnce 1s ease-out 1; /* animasi berjalan hanya sekali */
+}
