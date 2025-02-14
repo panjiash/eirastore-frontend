@@ -83,20 +83,20 @@ const MainMenuIndex = () => {
         data={dataDelete}
       />
 
-      <div className="w-full bg-white p-4 rounded-xl mt-2 shadow">
+      <div className="bg-white p-4 rounded-xl mt-2 shadow overflow-x-auto">
         <table className="w-full">
           <thead>
             <tr>
-              <th className="bg-eiraButton font-semibold text-lg text-eiraButtonText">
+              <th className="bg-eiraButton font-semibold text-lg text-eiraButtonText p-2">
                 No
               </th>
-              <th className="bg-eiraButton font-semibold text-lg text-eiraButtonText">
+              <th className="bg-eiraButton font-semibold text-lg text-eiraButtonText p-2">
                 Title
               </th>
-              <th className="bg-eiraButton font-semibold text-lg text-eiraButtonText">
+              <th className="bg-eiraButton font-semibold text-lg text-eiraButtonText p-2">
                 Pathname
               </th>
-              <th className="bg-eiraButton font-semibold text-lg text-eiraButtonText">
+              <th className="bg-eiraButton font-semibold text-lg text-eiraButtonText p-2">
                 Action
               </th>
             </tr>

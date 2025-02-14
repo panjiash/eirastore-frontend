@@ -76,29 +76,29 @@ const UserIndex = () => {
         </div>
       </div>
 
-      <div className="w-full bg-white p-4 rounded-xl mt-2 shadow">
+      <div className="bg-white p-4 rounded-xl mt-2 shadow overflow-x-auto">
         <table className="w-full">
           <thead>
             <tr>
-              <th className="bg-eiraButton font-semibold text-lg text-eiraButtonText">
+              <th className="bg-eiraButton font-semibold text-lg text-eiraButtonText p-2">
                 No
               </th>
-              <th className="bg-eiraButton font-semibold text-lg text-eiraButtonText">
+              <th className="bg-eiraButton font-semibold text-lg text-eiraButtonText p-2">
                 Nama
               </th>
-              <th className="bg-eiraButton font-semibold text-lg text-eiraButtonText">
+              <th className="bg-eiraButton font-semibold text-lg text-eiraButtonText p-2">
                 Email
               </th>
-              <th className="bg-eiraButton font-semibold text-lg text-eiraButtonText">
+              <th className="bg-eiraButton font-semibold text-lg text-eiraButtonText p-2">
                 Role
               </th>
-              <th className="bg-eiraButton font-semibold text-lg text-eiraButtonText">
+              <th className="bg-eiraButton font-semibold text-lg text-eiraButtonText p-2">
                 Permission
               </th>
-              <th className="bg-eiraButton font-semibold text-lg text-eiraButtonText">
+              <th className="bg-eiraButton font-semibold text-lg text-eiraButtonText p-2">
                 Status
               </th>
-              <th className="bg-eiraButton font-semibold text-lg text-eiraButtonText">
+              <th className="bg-eiraButton font-semibold text-lg text-eiraButtonText p-2">
                 Action
               </th>
             </tr>
@@ -106,11 +106,13 @@ const UserIndex = () => {
           <tbody>
             {msg ? (
               <tr>
-                <td colSpan={20}>{msg}</td>
+                <td colSpan={7} className="text-center p-2">
+                  {msg}
+                </td>
               </tr>
             ) : (
               datas?.map((data, i) => (
-                <tr key={i}>
+                <tr key={i} className="border-gray-300 border">
                   <td className="border-gray-300 border p-2 text-center">
                     {i + 1}
                   </td>

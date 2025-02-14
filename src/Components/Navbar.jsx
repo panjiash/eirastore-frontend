@@ -125,7 +125,7 @@ const Navbar = ({ children }) => {
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 p-4 bg-eiraBackground">
+        <div className="flex-1 p-4 bg-eiraBackground w-full">
           {/* <h1 className="text-3xl font-bold">Main Content</h1>
           <p>{userLogin?.name}</p> */}
           {children}
