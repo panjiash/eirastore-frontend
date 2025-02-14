@@ -4,11 +4,10 @@ import Login from "./pages/Auth/Login";
 import HomeIndex from "./pages/Home/Index";
 import Register from "./pages/Auth/Register";
 import VerifikasiIndex from "./pages/Auth/Verification";
-import ProductIndex from "./pages/Product/Index";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import ResetPassword from "./pages/Auth/ResetPassword";
 import MainMenuIndex from "./pages/MainMenu/Index";
-import TestingSubMenuIndex from "./pages/TestingSubMenu/Index";
+import UserIndex from "./pages/User/Index";
 
 function App() {
   return (
@@ -25,8 +24,7 @@ function App() {
           {/* dashboard */}
           <Route path="/" element={<HomeIndex />} />
           <Route path="/main-menu" element={<MainMenuIndex />} />
-          <Route path="/testing-sub-menu" element={<TestingSubMenuIndex />} />
-          <Route path="/product" element={<ProductIndex />} />
+          <Route path="/user" element={<UserIndex />} />
         </Routes>
       </Router>
     </React.Fragment>

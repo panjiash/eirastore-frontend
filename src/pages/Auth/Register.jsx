@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import BackdropLoading from "../../Components/BackdropLoading.jsx";
+import BackdropLoading from "../../components/BackdropLoading.jsx";
 import { serverMaster } from "../../config/Index.js";
 import TextareaAutosize from "react-textarea-autosize";
 import { useNavigate } from "react-router-dom";

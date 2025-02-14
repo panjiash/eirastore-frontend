@@ -1,15 +1,16 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Sidebar from "./Sidebar";
 import axios from "axios";
 import { serverMaster } from "../config/Index";
 import { useNavigate } from "react-router-dom";
+import { FiArrowLeftCircle, FiStar } from "react-icons/fi";
+import { useDispatch, useSelector } from "react-redux";
+import { getMe } from "../redux/authSlice";
 
-const Navbar = ({ children, setUser }) => {
+const Navbar = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const navigate = useNavigate();
-  const [userLogin, setUserLogin] = useState(null);
-
   const logout = async () => {
     try {
       await axios.delete(`${serverMaster}/logout`, {
@@ -20,23 +21,6 @@ const Navbar = ({ children, setUser }) => {
       console.error(error);
     }
   };
-  useEffect(() => {
-    const getMe = async () => {
-      try {
-        const response = await axios.get(`${serverMaster}/me`, {
-          withCredentials: true,
-        });
-        setUserLogin(response?.data?.user);
-
-        setUser(response?.data);
-      } catch (error) {
-        setUser(null);
-        navigate("/login");
-        console.log(error.response.data.message);
-      }
-    };
-    getMe();
-  }, [setUser, navigate]);
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -47,12 +31,43 @@ const Navbar = ({ children, setUser }) => {
     setIsOpenMenu(!isOpenMenu);
   };
 
+  const [sideBarLarge, setSidebarLarge] = useState(true);
+
+  const toggleSidebarLarge = () => {
+    setSidebarLarge(!sideBarLarge);
+  };
+
+  // redux
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (!user) {
+      dispatch(getMe());
+    }
+  }, [dispatch, user]);
+
   return (
     <div className="flex flex-col h-screen">
       {/* Navbar */}
       <nav className="bg-eiraButton text-eiraButtonText flex justify-between items-center relative">
-        <div className="text-2xl order-2 lg:order-1 font-bold pl-0 lg:pl-4">
-          My App
+        <div
+          className={`text-2xl order-2 lg:order-1 font-bold pl-0 lg:pl-4 lg:flex lg:items-center`}
+        >
+          {sideBarLarge ? "My App" : <FiStar />}
+          <span
+            className={`hidden lg:block hover:cursor-pointer ${
+              sideBarLarge ? "ml-[139px]" : "ml-11"
+            }`}
+            onClick={toggleSidebarLarge}
+          >
+            {/* {sideBarLarge ? <FiArrowLeft /> : <FiArrowRight />} */}
+            <FiArrowLeftCircle
+              className={`transition-all duration-500 ${
+                sideBarLarge ? "" : "rotate-180"
+              }`}
+            />
+          </span>
         </div>
         <button
           className={`lg:block lg:order-2 order-3 p-4 active:bg-eiraParagraph ${
@@ -65,7 +80,7 @@ const Navbar = ({ children, setUser }) => {
         {isOpenMenu && (
           <div className="absolute right-0 top-14 w-48 bg-eiraButton text-eiraButtonText rounded-b-xl">
             <div className="w-full text-center py-2 border border-b-eiraButtonText">
-              {userLogin?.name}
+              {user?.name}
             </div>
             <div
               onClick={logout}
@@ -102,11 +117,11 @@ const Navbar = ({ children, setUser }) => {
       <div className="flex flex-1">
         {/* Sidebar */}
         <div
-          className={`fixed lg:relative bg-eiraButton text-eiraButtonText w-64 h-full lg:block ${
-            isSidebarOpen ? "block" : "hidden"
-          }`}
+          className={`fixed lg:relative bg-eiraButton text-eiraButtonText transition-all duration-300 ease-in-out ${
+            sideBarLarge ? "w-64" : "w-24"
+          } h-full lg:block ${isSidebarOpen ? "block" : "hidden"}`}
         >
-          <Sidebar userLogin={userLogin} />
+          <Sidebar openSidebar={sideBarLarge} />
         </div>
 
         {/* Content Area */}
