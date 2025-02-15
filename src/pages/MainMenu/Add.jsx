@@ -92,7 +92,6 @@ const MainMenuAdd = ({ isOpen, onClose }) => {
 
       if (response?.status == 201) {
         onClose();
-        // alert("Menu added successfully!");
         setParent({
           value: null,
           label: "",

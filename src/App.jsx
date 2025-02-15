@@ -8,6 +8,7 @@ import ForgotPassword from "./pages/Auth/ForgotPassword";
 import ResetPassword from "./pages/Auth/ResetPassword";
 import MainMenuIndex from "./pages/MainMenu/Index";
 import UserIndex from "./pages/User/Index";
+import RoleIndex from "./pages/Role/Index";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/" element={<HomeIndex />} />
           <Route path="/main-menu" element={<MainMenuIndex />} />
           <Route path="/user" element={<UserIndex />} />
+          <Route path="/role" element={<RoleIndex />} />
         </Routes>
       </Router>
     </React.Fragment>

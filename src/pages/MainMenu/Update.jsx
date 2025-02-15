@@ -21,6 +21,7 @@ const MainMenuUpdate = ({ isOpen, onClose, data }) => {
   const [icons, setIcons] = useState(null);
 
   const [parents, setParents] = useState([]);
+  const [msg, setMsg] = useState("");
 
   const getParents = async () => {
     if (!parents?.length) {
@@ -84,26 +85,27 @@ const MainMenuUpdate = ({ isOpen, onClose, data }) => {
 
   const save = async (e) => {
     e.preventDefault();
+    try {
+      const payload = {
+        parent: parent?.value == 0 ? null : parent?.value,
+        title,
+        pathname,
+        icon: icon?.value,
+        order,
+      };
 
-    const payload = {
-      parent: parent?.value == 0 ? null : parent?.value,
-      title,
-      pathname,
-      icon: icon?.value,
-      order,
-    };
+      const response = await axios.put(
+        `${serverMaster}/main-menu/${data?.id}`,
+        payload,
+        {
+          withCredentials: true,
+        }
+      );
 
-    const response = await axios.put(
-      `${serverMaster}/main-menu/${data?.id}`,
-      payload,
-      {
-        withCredentials: true,
-      }
-    );
-
-    if (response?.status == 200) {
       onClose();
-      alert("Menu updated successfully!");
+      setMsg("");
+    } catch (error) {
+      setMsg(error.response.data.message);
     }
   };
 

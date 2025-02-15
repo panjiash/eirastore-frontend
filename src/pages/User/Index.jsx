@@ -45,7 +45,7 @@ const UserIndex = () => {
 
   const getDatas = async () => {
     try {
-      const response = await axios.get(`${serverMaster}/api/master/user`, {
+      const response = await axios.get(`${serverMaster}/user`, {
         withCredentials: true,
       });
       setDatas(response.data.data);

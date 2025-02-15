@@ -1,14 +1,13 @@
-/* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import Navbar from "../../components/Navbar";
+import { serverMaster } from "../../config/Index";
 import { FiEdit, FiPlusCircle, FiTrash2 } from "react-icons/fi";
 import axios from "axios";
-import { serverMaster } from "../../config/Index";
-import MainMenuAdd from "./Add";
-import MainMenuUpdate from "./Update";
-import MainMenuDelete from "./Delete";
-import Navbar from "../../components/Navbar";
-/* eslint-disable react/prop-types */
-const MainMenuIndex = () => {
+import RoleAdd from "./Add";
+import RoleUpdate from "./Update";
+import RoleDelete from "./Delete";
+
+const RoleIndex = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpenEdit, setIsModalOpenEdit] = useState(false);
   const [dataEdit, setDataEdit] = useState(null);
@@ -40,13 +39,12 @@ const MainMenuIndex = () => {
     setDataDelete(null);
     getData();
   };
-
-  const [menus, setMenus] = useState([]);
+  const [roles, setRoles] = useState([]);
   const getData = async () => {
-    const response = await axios.get(`${serverMaster}/main-menu`, {
+    const response = await axios.get(`${serverMaster}/role`, {
       withCredentials: true,
     });
-    setMenus(response.data.data);
+    setRoles(response.data.data);
   };
   useEffect(() => {
     getData();
@@ -55,9 +53,7 @@ const MainMenuIndex = () => {
     <Navbar>
       <div className="flex items-center">
         <div className="flex-1">
-          <h1 className="text-2xl font-semibold text-eiraHeadline">
-            Main Menu
-          </h1>
+          <h1 className="text-2xl font-semibold text-eiraHeadline">Role</h1>
         </div>
         <div className="flex-1 text-right">
           <button
@@ -69,20 +65,17 @@ const MainMenuIndex = () => {
         </div>
       </div>
 
-      <MainMenuAdd isOpen={isModalOpen} onClose={closeModal} />
-
-      <MainMenuUpdate
+      <RoleAdd isOpen={isModalOpen} onClose={closeModal} />
+      <RoleUpdate
         isOpen={isModalOpenEdit}
         onClose={closeModalEdit}
         data={dataEdit}
       />
-
-      <MainMenuDelete
+      <RoleDelete
         isOpen={isModalOpenDelete}
         onClose={closeModalDelete}
         data={dataDelete}
       />
-
       <div className="bg-white p-4 rounded-xl mt-2 shadow overflow-x-auto">
         <table className="w-full">
           <thead>
@@ -91,36 +84,45 @@ const MainMenuIndex = () => {
                 No
               </th>
               <th className="bg-eiraButton font-semibold text-lg text-eiraButtonText p-2">
-                Title
+                Nama Role
               </th>
               <th className="bg-eiraButton font-semibold text-lg text-eiraButtonText p-2">
-                Pathname
+                Menu
               </th>
               <th className="bg-eiraButton font-semibold text-lg text-eiraButtonText p-2">
-                Action
+                Permission
+              </th>
+              <th className="bg-eiraButton font-semibold text-lg text-eiraButtonText p-2">
+                Actions
               </th>
             </tr>
           </thead>
-
           <tbody>
-            {menus?.map((menu, i) => (
+            {roles?.map((role, i) => (
               <tr key={i}>
-                <td className="text-center border border-gray-300 p-2">
-                  <div className="my-1">{i + 1}</div>
+                <td className="border border-gray-300 p-2">{i + 1}</td>
+                <td className="border border-gray-300 p-2">{role.name}</td>
+                <td className="border border-gray-300 p-2">
+                  {role.main_menu.map((mainMenu) => (
+                    <div key={mainMenu.id}>{mainMenu.title}</div>
+                  ))}
                 </td>
-                <td className="border border-gray-300 p-2">{menu.title}</td>
-                <td className="border border-gray-300 p-2">{menu.pathname}</td>
+                <td className="border border-gray-300 p-2">
+                  {role.permissions.map((permission) => (
+                    <div key={permission.id}>{permission.name}</div>
+                  ))}
+                </td>
                 <td className="border border-gray-300 p-2">
                   <div className="flex justify-center">
                     <FiEdit
                       title="Edit"
                       className="w-6 h-6 cursor-pointer text-green-500 hover:text-green-500/80"
-                      onClick={() => openModalEdit(menu)}
+                      onClick={() => openModalEdit(role)}
                     />
                     <FiTrash2
                       title="Delete"
                       className="w-6 h-6 cursor-pointer text-red-500 hover:text-red-500/80 ml-1"
-                      onClick={() => openModalDelete(menu)}
+                      onClick={() => openModalDelete(role)}
                     />
                   </div>
                 </td>
@@ -133,4 +135,4 @@ const MainMenuIndex = () => {
   );
 };
 
-export default MainMenuIndex;
+export default RoleIndex;

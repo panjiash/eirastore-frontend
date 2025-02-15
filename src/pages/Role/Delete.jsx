@@ -1,12 +1,11 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-/* eslint-disable react/prop-types */
-import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import React, { useEffect, useRef, useState } from "react";
 import { serverMaster } from "../../config/Index";
 
-const MainMenuDelete = ({ isOpen, onClose, data }) => {
+const RoleDelete = ({ isOpen, onClose, data }) => {
   const modalRef = useRef(null);
   const [msg, setMsg] = useState("");
+
   useEffect(() => {
     if (isOpen) {
       setMsg("");
@@ -18,7 +17,6 @@ const MainMenuDelete = ({ isOpen, onClose, data }) => {
     };
 
     document.addEventListener("keydown", handleKeyDown);
-
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
@@ -28,21 +26,15 @@ const MainMenuDelete = ({ isOpen, onClose, data }) => {
       onClose();
     }
   };
-
   if (!isOpen) return null;
-
   const save = async (e) => {
     e.preventDefault();
     try {
-      await axios.delete(
-        `${serverMaster}/main-menu/${data?.id}`,
-
-        {
-          withCredentials: true,
-        }
-      );
-      setMsg("");
+      await axios.delete(`${serverMaster}/role/${data.id}`, {
+        withCredentials: true,
+      });
       onClose();
+      setMsg("");
     } catch (error) {
       setMsg(error.response.data.message);
     }
@@ -58,15 +50,15 @@ const MainMenuDelete = ({ isOpen, onClose, data }) => {
           ref={modalRef}
           className="bg-white rounded-lg shadow-lg max-w-lg w-full p-4 relative"
         >
-          <h2 className="text-xl font-semibold mb-4">Delete Menu</h2>
+          <h2 className="text-xl font-semibold mb-4">Delete Role</h2>
           <button
             onClick={onClose}
             className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
           >
             ✕
           </button>
-          {msg && <div className="text-red-600 text-center mb-4">{msg}</div>}
-          Menu <b>{data?.title}</b> akan di hapus ?
+          {msg && <div className="text-red-600 text-center mb-4 ">{msg}</div>}
+          role <b>{data?.name}</b> akan di hapus ?
           <div className="flex float-right mt-4">
             <button
               onClick={onClose}
@@ -87,4 +79,4 @@ const MainMenuDelete = ({ isOpen, onClose, data }) => {
   );
 };
 
-export default MainMenuDelete;
+export default RoleDelete;
