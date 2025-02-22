@@ -8,7 +8,7 @@ import { FiArrowLeftCircle, FiStar } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import { getMe } from "../redux/authSlice";
 
-const Navbar = ({ children }) => {
+const Navbar = ({ userLogin, children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const navigate = useNavigate();
   const logout = async () => {
@@ -38,14 +38,14 @@ const Navbar = ({ children }) => {
   };
 
   // redux
-  const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
+  // const dispatch = useDispatch();
+  // const { user } = useSelector((state) => state.auth);
 
-  useEffect(() => {
-    if (!user) {
-      dispatch(getMe());
-    }
-  }, [dispatch, user]);
+  // useEffect(() => {
+  //   if (!user) {
+  //     dispatch(getMe());
+  //   }
+  // }, [dispatch, user]);
 
   return (
     <div className="flex flex-col h-screen">
@@ -80,7 +80,7 @@ const Navbar = ({ children }) => {
         {isOpenMenu && (
           <div className="absolute right-0 top-14 w-48 bg-eiraButton text-eiraButtonText rounded-b-xl">
             <div className="w-full text-center py-2 border border-b-eiraButtonText">
-              {user?.name}
+              {userLogin?.name}
             </div>
             <div
               onClick={logout}
@@ -121,15 +121,10 @@ const Navbar = ({ children }) => {
             sideBarLarge ? "w-64" : "w-24"
           } h-full lg:block ${isSidebarOpen ? "block" : "hidden"}`}
         >
-          <Sidebar openSidebar={sideBarLarge} />
+          <Sidebar openSidebar={sideBarLarge} userLogin={userLogin} />
         </div>
 
-        {/* Content Area */}
-        <div className="flex-1 p-4 bg-eiraBackground w-full">
-          {/* <h1 className="text-3xl font-bold">Main Content</h1>
-          <p>{userLogin?.name}</p> */}
-          {children}
-        </div>
+        <div className="flex-1 p-4 bg-eiraBackground w-full">{children}</div>
       </div>
     </div>
   );

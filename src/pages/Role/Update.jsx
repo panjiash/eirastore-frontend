@@ -166,7 +166,7 @@ const RoleUpdate = ({ isOpen, onClose, data }) => {
       >
         <div
           ref={modalRef}
-          className="bg-white rounded-lg shadow-lg max-w-lg w-full p-4 relative"
+          className="bg-white rounded-lg shadow-lg max-w-3xl w-full p-4 relative"
         >
           <h2 className="text-xl font-semibold mb-4">Update User</h2>
           <button
@@ -176,7 +176,7 @@ const RoleUpdate = ({ isOpen, onClose, data }) => {
             ✕
           </button>
           <form onSubmit={save}>
-            <div className="w-full space-y-2">
+            <div className="w-full h-[70vh] space-y-2 overflow-y-auto">
               <div className="flex items-center">
                 <div className="w-40 font-semibold">Nama Role</div>
                 <input
@@ -212,7 +212,9 @@ const RoleUpdate = ({ isOpen, onClose, data }) => {
                   isMulti
                 />
               </div>
+            </div>
 
+            <div className="w-full mt-2">
               <div className="flex float-right">
                 <button
                   onClick={onClose}

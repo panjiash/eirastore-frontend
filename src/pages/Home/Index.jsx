@@ -18,18 +18,18 @@ import Navbar from "../../components/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { getMe } from "../../redux/authSlice";
 
-const HomeIndex = () => {
-  const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
-  useEffect(() => {
-    if (!user) {
-      dispatch(getMe());
-    }
-  }, [dispatch, user]);
+const HomeIndex = ({ userLogin }) => {
+  // const dispatch = useDispatch();
+  // const { user } = useSelector((state) => state.auth);
+  // useEffect(() => {
+  //   if (!user) {
+  //     dispatch(getMe());
+  //   }
+  // }, [dispatch, user]);
 
   return (
-    <Navbar>
-      <div>{user?.name}</div>
+    <Navbar userLogin={userLogin}>
+      <div>{userLogin?.name}</div>
     </Navbar>
   );
 };

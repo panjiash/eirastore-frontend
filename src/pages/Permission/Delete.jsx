@@ -2,11 +2,14 @@ import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { serverMaster } from "../../config/Index";
 
-const UserDelete = ({ isOpen, onClose, data }) => {
-  const [msg, setMsg] = useState("");
+const PermissionDelete = ({ isOpen, onClose, data }) => {
   const modalRef = useRef(null);
+  const [msg, setMsg] = useState("");
+
   useEffect(() => {
-    if (isOpen) setMsg("");
+    if (isOpen) {
+      setMsg("");
+    }
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
         onClose();
@@ -27,11 +30,11 @@ const UserDelete = ({ isOpen, onClose, data }) => {
   const save = async (e) => {
     e.preventDefault();
     try {
-      await axios.delete(`${serverMaster}/user/${data.id}`, {
+      await axios.delete(`${serverMaster}/permission/${data.id}`, {
         withCredentials: true,
       });
-      setMsg("");
       onClose();
+      setMsg("");
     } catch (error) {
       setMsg(error.response.data.message);
     }
@@ -47,17 +50,15 @@ const UserDelete = ({ isOpen, onClose, data }) => {
           ref={modalRef}
           className="bg-white rounded-lg shadow-lg max-w-lg w-full p-4 relative"
         >
-          <h2 className="text-xl font-semibold mb-4">Delete User</h2>
+          <h2 className="text-xl font-semibold mb-4">Delete Permission</h2>
           <button
             onClick={onClose}
             className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
           >
             ✕
           </button>
-          {msg && (
-            <div className="text-red-600 text-center text-sm mt-4">{msg}</div>
-          )}
-          user <b>{data?.name}</b> akan di hapus ?
+          {msg && <div className="text-red-600 text-center mb-4 ">{msg}</div>}
+          Permission <b>{data?.name}</b> akan di hapus ?
           <div className="flex float-right mt-4">
             <button
               onClick={onClose}
@@ -78,4 +79,4 @@ const UserDelete = ({ isOpen, onClose, data }) => {
   );
 };
 
-export default UserDelete;
+export default PermissionDelete;

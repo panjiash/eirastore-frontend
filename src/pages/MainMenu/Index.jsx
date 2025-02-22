@@ -7,8 +7,9 @@ import MainMenuAdd from "./Add";
 import MainMenuUpdate from "./Update";
 import MainMenuDelete from "./Delete";
 import Navbar from "../../components/Navbar";
+import { useNavigate } from "react-router-dom";
 /* eslint-disable react/prop-types */
-const MainMenuIndex = () => {
+const MainMenuIndex = ({ userLogin }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpenEdit, setIsModalOpenEdit] = useState(false);
   const [dataEdit, setDataEdit] = useState(null);
@@ -42,17 +43,23 @@ const MainMenuIndex = () => {
   };
 
   const [menus, setMenus] = useState([]);
+
   const getData = async () => {
-    const response = await axios.get(`${serverMaster}/main-menu`, {
-      withCredentials: true,
-    });
-    setMenus(response.data.data);
+    try {
+      const response = await axios.get(`${serverMaster}/main-menu`, {
+        withCredentials: true,
+      });
+      setMenus(response.data.data);
+    } catch (error) {
+      setMenus([]);
+      alert(error.response.data.message);
+    }
   };
   useEffect(() => {
     getData();
   }, []);
   return (
-    <Navbar>
+    <Navbar userLogin={userLogin}>
       <div className="flex items-center">
         <div className="flex-1">
           <h1 className="text-2xl font-semibold text-eiraHeadline">
@@ -60,12 +67,16 @@ const MainMenuIndex = () => {
           </h1>
         </div>
         <div className="flex-1 text-right">
-          <button
-            className="p-2 bg-eiraButton rounded-xl hover:bg-eiraButton/80"
-            onClick={openModal}
-          >
-            <FiPlusCircle className="w-6 h-6 text-eiraButtonText" />
-          </button>
+          {userLogin?.role?.permissions?.find(
+            (item) => item.name == "main-menu.post"
+          ) && (
+            <button
+              className="p-2 bg-eiraButton rounded-xl hover:bg-eiraButton/80"
+              onClick={openModal}
+            >
+              <FiPlusCircle className="w-6 h-6 text-eiraButtonText" />
+            </button>
+          )}
         </div>
       </div>
 
@@ -103,6 +114,9 @@ const MainMenuIndex = () => {
           </thead>
 
           <tbody>
+            {!userLogin?.role?.permissions?.find(
+              (item) => item?.name == "main-menus.get"
+            ) && "You dont have permission"}
             {menus?.map((menu, i) => (
               <tr key={i}>
                 <td className="text-center border border-gray-300 p-2">

@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { IconMap } from "./IconMap";
 import { useDispatch, useSelector } from "react-redux";
 import { getMe } from "../redux/authSlice";
-const Sidebar = ({ openSidebar }) => {
+const Sidebar = ({ openSidebar, userLogin }) => {
   const location = useLocation();
   const [openDropdowns, setOpenDropdowns] = useState({});
   const toggleDropdown = (title) => {
@@ -19,15 +19,15 @@ const Sidebar = ({ openSidebar }) => {
   };
   const navigate = useNavigate();
 
-  const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
-  useEffect(() => {
-    if (!user) {
-      dispatch(getMe());
-    }
-  }, [dispatch, user]);
+  // const dispatch = useDispatch();
+  // const { user } = useSelector((state) => state.auth);
+  // useEffect(() => {
+  //   if (!user) {
+  //     dispatch(getMe());
+  //   }
+  // }, [dispatch, user]);
 
-  const menus = user?.role?.main_menu;
+  const menus = userLogin?.role?.main_menu;
   const renderMenu = (menuItems) => {
     return (
       <ul>
