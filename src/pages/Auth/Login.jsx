@@ -42,7 +42,7 @@ const Login = () => {
             <img
               src="/img/bg-login.jpg"
               alt="Login Background"
-              className="object-cover w-[800px] h-[100vh]"
+              className="object-cover w-[100%] h-[100vh]"
             />
           </div>
 

@@ -12,7 +12,7 @@ export const getMe = createAsyncThunk(
       });
       return response.data.user;
     } catch (error) {
-      window.location.href = "/login";
+      // window.location.href = "/login";
       return rejectWithValue(
         error.response?.data?.message || "Failed to fetch user"
       );

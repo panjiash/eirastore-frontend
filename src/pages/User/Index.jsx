@@ -6,17 +6,17 @@ import { serverMaster } from "../../config/Index";
 import UserUpdate from "./Update.jsx";
 import UserDelete from "./Delete.jsx";
 import Navbar from "../../components/Navbar.jsx";
+import TablePagination from "../../components/TablePagination.jsx";
+import { useParams } from "react-router-dom";
 
 /* eslint-disable react/prop-types */
 const UserIndex = ({ userLogin }) => {
-  const [datas, setDatas] = useState([]);
-  const [msg, setMsg] = useState("");
   // open modal tambah
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => {
     setIsModalOpen(false);
-    getDatas();
+    getData(params);
   };
   // open modal edit
   const [isModalOpenEdit, setIsModalOpenEdit] = useState(false);
@@ -28,7 +28,7 @@ const UserIndex = ({ userLogin }) => {
   const closeModalEdit = () => {
     setIsModalOpenEdit(false);
     setDataEdit(null);
-    getDatas();
+    getData(params);
   };
   // open modal delete
   const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
@@ -40,25 +40,78 @@ const UserIndex = ({ userLogin }) => {
   const closeModalDelete = () => {
     setIsModalOpenDelete(false);
     setDataDelete(null);
-    getDatas();
+    getData(params);
   };
 
-  const getDatas = async () => {
+  const [data, setData] = useState(null);
+  const [msg, setMsg] = useState("");
+  const [params, setParams] = useState({
+    search: "",
+    page: 1,
+    limit: 10,
+  });
+  const [isLoading, setIsLoading] = useState(false);
+
+  const getData = async (param) => {
+    setIsLoading(true);
     try {
       const response = await axios.get(`${serverMaster}/user`, {
         withCredentials: true,
+        params: param,
       });
-      setDatas(response.data.data);
-
+      setData(response.data);
       setMsg("");
     } catch (error) {
       setMsg(error.response.data.message);
+      setData([]);
+    } finally {
+      setIsLoading(false);
     }
   };
 
+  const storageTitle = "userParams";
+  const storageParams = sessionStorage.getItem(storageTitle);
+  const saveToStorage = (param) => {
+    setParams(param);
+    getData(param);
+    sessionStorage.setItem(storageTitle, JSON.stringify(param));
+  };
+
+  const changeLimit = (e) => {
+    const newParams = {
+      ...params,
+      page: 1,
+      limit: parseInt(e.target.value),
+    };
+    saveToStorage(newParams);
+  };
+
+  const changeSearch = (e) => {
+    const newParams = {
+      ...params,
+      search: e.target.value,
+      page: 1,
+    };
+    saveToStorage(newParams);
+  };
+
+  const handlePageChange = (newPage) => {
+    const newParams = {
+      ...params,
+      page: newPage,
+    };
+    saveToStorage(newParams);
+  };
+
   useEffect(() => {
-    getDatas();
+    let initialParams = params;
+    if (storageParams) {
+      initialParams = JSON.parse(storageParams);
+      setParams(initialParams);
+    }
+    getData(initialParams);
   }, []);
+  const totalPages = Math.ceil((data?.total || 0) / params.limit);
 
   return (
     <Navbar userLogin={userLogin}>
@@ -82,10 +135,30 @@ const UserIndex = ({ userLogin }) => {
         </div>
       </div>
 
-      <div className="bg-white p-4 rounded-xl mt-2 shadow overflow-x-auto">
-        {userLogin?.role?.permissions?.find(
-          (item) => item.name == "users.get"
-        ) && (
+      <UserAdd isOpen={isModalOpen} onClose={closeModal} />
+      <UserUpdate
+        isOpen={isModalOpenEdit}
+        onClose={closeModalEdit}
+        data={dataEdit}
+      />
+      <UserDelete
+        isOpen={isModalOpenDelete}
+        onClose={closeModalDelete}
+        data={dataDelete}
+      />
+
+      <div className="bg-white p-4 rounded-xl mt-2 shadow">
+        <TablePagination
+          search={params.search}
+          limit={params.limit}
+          page={params.page}
+          total={{ current: data?.data?.length, all: data?.total }}
+          totalPages={totalPages}
+          onSearchChange={changeSearch}
+          onLimitChange={changeLimit}
+          onPageChange={handlePageChange}
+          isLoading={isLoading}
+        >
           <table className="w-full">
             <thead>
               <tr>
@@ -123,7 +196,7 @@ const UserIndex = ({ userLogin }) => {
                   </td>
                 </tr>
               ) : (
-                datas?.map((data, i) => (
+                data?.data?.map((data, i) => (
                   <tr key={i} className="border-gray-300 border">
                     <td className="border-gray-300 border p-2 text-center">
                       {i + 1}
@@ -171,20 +244,8 @@ const UserIndex = ({ userLogin }) => {
               )}
             </tbody>
           </table>
-        )}
+        </TablePagination>
       </div>
-
-      <UserAdd isOpen={isModalOpen} onClose={closeModal} />
-      <UserUpdate
-        isOpen={isModalOpenEdit}
-        onClose={closeModalEdit}
-        data={dataEdit}
-      />
-      <UserDelete
-        isOpen={isModalOpenDelete}
-        onClose={closeModalDelete}
-        data={dataDelete}
-      />
     </Navbar>
   );
 };
